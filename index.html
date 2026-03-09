@@ -254,7 +254,7 @@
 
         /* ========== HERO ========== */
         .hero {
-            padding: 160px 24px 100px;
+            padding: 195px 24px 100px;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -1197,7 +1197,7 @@
             }
 
             .hero {
-                padding: 130px 20px 80px;
+                padding: 160px 20px 80px;
             }
 
             .hero h1 {
@@ -1208,9 +1208,8 @@
                 font-size: 1.05rem;
             }
 
-            .hero-ctas {
+            .waitlist-form {
                 flex-direction: column;
-                align-items: center;
             }
 
             .hero-phone {
@@ -1295,19 +1294,213 @@
             }
         }
 
+        /* ========== URGENCY BANNER ========== */
+        .urgency-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1002;
+            background: linear-gradient(90deg, #0D1B12, var(--green-dark), #0D1B12);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 8px 24px;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .urgency-banner span {
+            color: var(--green-bright);
+            font-weight: 700;
+        }
+
+        .nav {
+            top: 35px;
+        }
+
+        .nav.scrolled {
+            top: 35px;
+        }
+
         /* Scroll to top indicator */
         .scroll-progress {
             position: fixed;
-            top: 0;
+            top: 35px;
             left: 0;
             height: 3px;
             background: linear-gradient(90deg, var(--green-primary), var(--green-light));
             z-index: 1001;
             transition: width 0.1s linear;
         }
+
+        /* ========== WAITLIST ========== */
+        .waitlist-section {
+            max-width: 640px;
+            margin: 0 auto 2.5rem;
+        }
+
+        .waitlist-counter {
+            font-family: var(--font-headline);
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .waitlist-counter .count-highlight {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--green-bright);
+        }
+
+        .waitlist-progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(82, 183, 136, 0.12);
+            border-radius: 100px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .waitlist-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--green-primary), var(--green-light));
+            border-radius: 100px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .waitlist-form {
+            display: flex;
+            gap: 0.5rem;
+            align-items: stretch;
+        }
+
+        .waitlist-form input {
+            flex: 1;
+            min-width: 0;
+            padding: 14px 16px;
+            background: rgba(13, 27, 18, 0.6);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            transition: var(--transition);
+            outline: none;
+        }
+
+        .waitlist-form input:focus {
+            border-color: var(--green-light);
+            box-shadow: 0 0 0 3px rgba(82, 183, 136, 0.1);
+        }
+
+        .waitlist-form input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .waitlist-form button {
+            padding: 14px 28px;
+            background: linear-gradient(135deg, var(--green-primary), var(--green-light));
+            color: white;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            font-weight: 600;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .waitlist-form button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(82, 183, 136, 0.3);
+        }
+
+        .waitlist-form button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .waitlist-message {
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            min-height: 1.4em;
+        }
+
+        .waitlist-message.success {
+            color: var(--green-bright);
+        }
+
+        .waitlist-message.error {
+            color: #e07070;
+        }
+
+        .waitlist-message.info {
+            color: var(--amber);
+        }
+
+        .waitlist-explore {
+            margin-top: 1.25rem;
+        }
+
+        .waitlist-explore a {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            transition: color var(--transition);
+        }
+
+        .waitlist-explore a:hover {
+            color: var(--green-light);
+        }
+
+        /* ========== RESPONSIVE — WAITLIST ========== */
+        @media (max-width: 768px) {
+            .urgency-banner {
+                font-size: 0.75rem;
+                padding: 6px 16px;
+            }
+
+            .nav {
+                top: 31px;
+            }
+
+            .nav.scrolled {
+                top: 31px;
+            }
+
+            .scroll-progress {
+                top: 31px;
+            }
+
+            .waitlist-form {
+                flex-direction: column;
+            }
+
+            .waitlist-form input,
+            .waitlist-form button {
+                width: 100%;
+            }
+
+            .waitlist-counter {
+                font-size: 1.1rem;
+            }
+
+            .waitlist-counter .count-highlight {
+                font-size: 1.3rem;
+            }
+        }
     </style>
 </head>
 <body>
+
+<!-- Urgency Banner -->
+<div class="urgency-banner" id="urgencyBanner">
+    &#128640; Limited Beta &mdash; Only <span id="urgencyCount">...</span> spots left
+</div>
 
 <!-- Scroll Progress -->
 <div class="scroll-progress" id="scrollProgress"></div>
@@ -1339,14 +1532,22 @@
         <p class="fade-in fade-in-delay-2">
             Smart debt payoff strategies, all your accounts in one place, and AI-powered insights to help you build real wealth.
         </p>
-        <div class="hero-ctas fade-in fade-in-delay-3">
-            <a href="#download" class="btn-primary">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                Download App
-            </a>
-            <a href="#features" class="btn-secondary">
-                Learn More
-            </a>
+        <div class="waitlist-section fade-in fade-in-delay-3">
+            <div class="waitlist-counter" id="waitlistCounter">
+                &#128293; <span class="count-highlight" id="spotsRemaining">...</span> of 200 spots remaining
+            </div>
+            <div class="waitlist-progress-bar">
+                <div class="waitlist-progress-fill" id="waitlistProgress" style="width: 0%"></div>
+            </div>
+            <form class="waitlist-form" id="waitlistForm">
+                <input type="text" id="waitlistName" placeholder="Your name" required>
+                <input type="email" id="waitlistEmail" placeholder="you@example.com" required>
+                <button type="submit" id="waitlistBtn">Join the Waitlist</button>
+            </form>
+            <div class="waitlist-message" id="waitlistMessage"></div>
+            <div class="waitlist-explore">
+                <a href="#features">Explore Features &darr;</a>
+            </div>
         </div>
 
         <!-- Phone Mockup -->
@@ -1689,6 +1890,117 @@
 </footer>
 
 <script>
+    // ========== SUPABASE CONFIG ==========
+    const SUPABASE_URL = 'https://qkkqjpthrqxqnmkldlwt.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFra3FqcHRocnF4cW5ta2xkbHd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5MTM2MjIsImV4cCI6MjA4ODQ4OTYyMn0.6QCjt_Do_EGk_P1eqI-kaQPJHtEXJd-9LrMqVf0vFa4';
+    const TOTAL_SPOTS = 200;
+    const APP_NAME = 'wealthpilot';
+
+    // ========== WAITLIST ELEMENTS ==========
+    const waitlistForm = document.getElementById('waitlistForm');
+    const waitlistBtn = document.getElementById('waitlistBtn');
+    const waitlistMessage = document.getElementById('waitlistMessage');
+    const spotsRemainingEl = document.getElementById('spotsRemaining');
+    const urgencyCountEl = document.getElementById('urgencyCount');
+    const waitlistProgressEl = document.getElementById('waitlistProgress');
+    const waitlistCounterEl = document.getElementById('waitlistCounter');
+
+    // ========== FETCH WAITLIST COUNT ==========
+    async function fetchWaitlistCount() {
+        try {
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/waitlist_count`, {
+                method: 'POST',
+                headers: {
+                    'apikey': SUPABASE_ANON_KEY,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ app_name: APP_NAME })
+            });
+            if (!res.ok) throw new Error('Failed to fetch count');
+            const count = await res.json();
+            updateCounter(count);
+        } catch (err) {
+            console.error('Waitlist count error:', err);
+            // Show a default state on error
+            updateCounter(0);
+        }
+    }
+
+    function updateCounter(signedUp) {
+        const remaining = Math.max(0, TOTAL_SPOTS - signedUp);
+        const filledPercent = Math.min(100, (signedUp / TOTAL_SPOTS) * 100);
+
+        spotsRemainingEl.textContent = remaining;
+        urgencyCountEl.textContent = remaining;
+        waitlistProgressEl.style.width = filledPercent + '%';
+
+        if (remaining === 0) {
+            waitlistCounterEl.innerHTML = '&#128293; <span class="count-highlight">0</span> of 200 spots remaining &mdash; Waitlist Full!';
+            waitlistBtn.textContent = 'Join Overflow List';
+            urgencyCountEl.parentElement.innerHTML = '&#128640; Beta waitlist full &mdash; <span id="urgencyCount">join the overflow list</span>';
+        }
+    }
+
+    // ========== WAITLIST FORM SUBMIT ==========
+    waitlistForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const name = document.getElementById('waitlistName').value.trim();
+        const email = document.getElementById('waitlistEmail').value.trim();
+
+        if (!name || !email) return;
+
+        waitlistBtn.disabled = true;
+        waitlistBtn.textContent = 'Joining...';
+        waitlistMessage.textContent = '';
+        waitlistMessage.className = 'waitlist-message';
+
+        try {
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/waitlist`, {
+                method: 'POST',
+                headers: {
+                    'apikey': SUPABASE_ANON_KEY,
+                    'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+                    'Content-Type': 'application/json',
+                    'Prefer': 'return=minimal'
+                },
+                body: JSON.stringify({ email: email, name: name, app: APP_NAME })
+            });
+
+            if (res.status === 409) {
+                waitlistMessage.textContent = "You're already on the list! We'll notify you at launch.";
+                waitlistMessage.className = 'waitlist-message info';
+            } else if (res.ok || res.status === 201) {
+                waitlistMessage.textContent = "You're in! We'll notify you at launch.";
+                waitlistMessage.className = 'waitlist-message success';
+                waitlistForm.reset();
+                // Refresh the counter
+                await fetchWaitlistCount();
+            } else {
+                const errData = await res.json().catch(() => ({}));
+                // Check for unique constraint violation in error message
+                if (errData.message && errData.message.includes('duplicate') || errData.code === '23505') {
+                    waitlistMessage.textContent = "You're already on the list! We'll notify you at launch.";
+                    waitlistMessage.className = 'waitlist-message info';
+                } else {
+                    throw new Error(errData.message || 'Signup failed');
+                }
+            }
+        } catch (err) {
+            console.error('Waitlist signup error:', err);
+            waitlistMessage.textContent = 'Something went wrong. Please try again.';
+            waitlistMessage.className = 'waitlist-message error';
+        } finally {
+            waitlistBtn.disabled = false;
+            // Restore button text based on current state
+            const currentRemaining = parseInt(spotsRemainingEl.textContent);
+            waitlistBtn.textContent = currentRemaining === 0 ? 'Join Overflow List' : 'Join the Waitlist';
+        }
+    });
+
+    // Fetch count on page load
+    fetchWaitlistCount();
+
     // ========== SCROLL PROGRESS ==========
     window.addEventListener('scroll', () => {
         const scrollTop = document.documentElement.scrollTop;
