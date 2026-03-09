@@ -25,24 +25,38 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
+        /* ========== CSS VARIABLES ========== */
         :root {
-            --green: #2D6A4F;
+            --bg-deep: #0D1B12;
+            --bg-card: #142A1F;
+            --bg-card-hover: #1A3528;
+            --green-primary: #2D6A4F;
             --green-light: #52B788;
+            --green-bright: #74D4A4;
             --green-dark: #1B4332;
+            --green-glow: rgba(82, 183, 136, 0.15);
             --amber: #C48B4A;
-            --purple: #7C6F9C;
-            --rose: #C77D6A;
-            --bg: #FAFAF5;
-            --card: #FFFFFF;
-            --text: #1A1A1A;
-            --text-secondary: #6B7280;
-            --border: #E5E7EB;
+            --text-primary: #F0F7F4;
+            --text-secondary: #9CB8A9;
+            --text-muted: #5E7D6C;
+            --border-subtle: rgba(82, 183, 136, 0.12);
+            --border-card: rgba(82, 183, 136, 0.08);
+            --font-headline: 'Space Grotesk', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --radius-xl: 28px;
+            --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.3);
+            --shadow-glow: 0 0 40px rgba(82, 183, 136, 0.08);
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        * {
+        /* ========== RESET ========== */
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -50,29 +64,121 @@
 
         html {
             scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg);
-            color: var(--text);
+            font-family: var(--font-body);
+            background: var(--bg-deep);
+            color: var(--text-primary);
             line-height: 1.6;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        /* NAV */
-        nav {
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-headline);
+            line-height: 1.15;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* ========== UTILITY ========== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--green-light), var(--green-bright));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-label {
+            font-family: var(--font-headline);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--green-light);
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            line-height: 1.7;
+        }
+
+        /* ========== ANIMATIONS ========== */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fade-in-delay-1 { transition-delay: 0.1s; }
+        .fade-in-delay-2 { transition-delay: 0.2s; }
+        .fade-in-delay-3 { transition-delay: 0.3s; }
+        .fade-in-delay-4 { transition-delay: 0.4s; }
+        .fade-in-delay-5 { transition-delay: 0.5s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        /* ========== NAVIGATION ========== */
+        .nav {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            z-index: 100;
-            padding: 1rem 2rem;
+            z-index: 1000;
+            padding: 0 24px;
+            transition: var(--transition);
+        }
+
+        .nav.scrolled {
+            background: rgba(13, 27, 18, 0.85);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            background: rgba(250, 250, 245, 0.85);
-            border-bottom: 1px solid rgba(0,0,0,0.06);
-            transition: all 0.3s;
+            border-bottom: 1px solid var(--border-subtle);
         }
 
         .nav-inner {
@@ -81,35 +187,30 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            height: 72px;
         }
 
-        .logo {
+        .nav-logo {
             display: flex;
             align-items: center;
-            gap: 0.6rem;
-            text-decoration: none;
-            color: var(--text);
+            gap: 10px;
+            font-family: var(--font-headline);
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: var(--text-primary);
         }
 
-        .logo-icon {
+        .nav-logo-icon {
             width: 36px;
             height: 36px;
-            background: linear-gradient(135deg, var(--green-light), var(--green-dark));
+            background: linear-gradient(135deg, var(--green-primary), var(--green-light));
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .logo-icon svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        .logo span {
-            font-weight: 700;
-            font-size: 1.2rem;
-            letter-spacing: -0.02em;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: white;
         }
 
         .nav-links {
@@ -120,52 +221,40 @@
         }
 
         .nav-links a {
-            text-decoration: none;
-            color: var(--text-secondary);
             font-size: 0.9rem;
             font-weight: 500;
-            transition: color 0.2s;
+            color: var(--text-secondary);
+            transition: color var(--transition);
         }
 
         .nav-links a:hover {
-            color: var(--green);
+            color: var(--green-light);
         }
 
         .nav-cta {
-            background: var(--green) !important;
-            color: white !important;
-            padding: 0.55rem 1.4rem;
-            border-radius: 100px;
-            font-weight: 600 !important;
-            transition: transform 0.2s, box-shadow 0.2s !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            background: linear-gradient(135deg, var(--green-primary), var(--green-light));
+            color: white;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
         }
 
         .nav-cta:hover {
             transform: translateY(-1px);
-            box-shadow: 0 4px 16px rgba(45, 106, 79, 0.3);
+            box-shadow: 0 4px 20px rgba(82, 183, 136, 0.3);
         }
 
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-
-        .mobile-menu-btn span {
-            display: block;
-            width: 24px;
-            height: 2px;
-            background: var(--text);
-            margin: 5px 0;
-            border-radius: 2px;
-            transition: all 0.3s;
-        }
-
-        /* HERO */
+        /* ========== HERO ========== */
         .hero {
-            padding: 10rem 2rem 6rem;
+            padding: 160px 24px 100px;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -174,63 +263,56 @@
         .hero::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -20%;
-            width: 140%;
-            height: 100%;
-            background: radial-gradient(ellipse at 30% 50%, rgba(82, 183, 136, 0.08) 0%, transparent 60%),
-                        radial-gradient(ellipse at 70% 30%, rgba(45, 106, 79, 0.06) 0%, transparent 50%);
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(45, 106, 79, 0.15) 0%, transparent 70%);
             pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         .hero-badge {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            background: rgba(45, 106, 79, 0.08);
-            border: 1px solid rgba(45, 106, 79, 0.15);
-            padding: 0.4rem 1rem;
+            gap: 8px;
+            padding: 8px 18px;
+            background: rgba(82, 183, 136, 0.1);
+            border: 1px solid var(--border-subtle);
             border-radius: 100px;
             font-size: 0.85rem;
-            color: var(--green);
-            font-weight: 600;
-            margin-bottom: 1.5rem;
+            font-weight: 500;
+            color: var(--green-light);
+            margin-bottom: 2rem;
         }
 
         .hero-badge::before {
             content: '';
-            width: 6px;
-            height: 6px;
-            background: var(--green);
+            width: 7px;
+            height: 7px;
+            background: var(--green-light);
             border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
+            animation: pulse-dot 2s infinite;
         }
 
         .hero h1 {
             font-size: clamp(2.8rem, 6vw, 4.5rem);
-            font-weight: 800;
+            font-weight: 700;
             letter-spacing: -0.03em;
-            line-height: 1.1;
             margin-bottom: 1.5rem;
-            position: relative;
-        }
-
-        .hero h1 .gradient-text {
-            background: linear-gradient(135deg, var(--green), var(--green-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
         .hero p {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             color: var(--text-secondary);
-            max-width: 600px;
+            max-width: 580px;
             margin: 0 auto 2.5rem;
             line-height: 1.7;
         }
@@ -240,323 +322,239 @@
             gap: 1rem;
             justify-content: center;
             flex-wrap: wrap;
+            margin-bottom: 4rem;
         }
 
         .btn-primary {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            background: var(--green);
+            gap: 10px;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--green-primary), var(--green-light));
             color: white;
-            padding: 0.9rem 2rem;
-            border-radius: 100px;
-            text-decoration: none;
-            font-weight: 600;
+            font-family: var(--font-body);
             font-size: 1rem;
-            transition: all 0.2s;
+            font-weight: 600;
             border: none;
+            border-radius: var(--radius-md);
             cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(45, 106, 79, 0.3);
+            box-shadow: 0 8px 30px rgba(82, 183, 136, 0.3);
         }
 
         .btn-secondary {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            background: var(--card);
-            color: var(--text);
-            padding: 0.9rem 2rem;
-            border-radius: 100px;
-            text-decoration: none;
-            font-weight: 600;
+            gap: 10px;
+            padding: 16px 32px;
+            background: transparent;
+            color: var(--text-primary);
+            font-family: var(--font-body);
             font-size: 1rem;
-            border: 1px solid var(--border);
-            transition: all 0.2s;
+            font-weight: 600;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
         }
 
         .btn-secondary:hover {
+            background: rgba(82, 183, 136, 0.08);
+            border-color: var(--green-light);
             transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
         }
 
-        /* HERO VISUAL */
-        .hero-visual {
-            margin-top: 4rem;
+        /* Phone Mockup */
+        .hero-phone {
             position: relative;
-            max-width: 900px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .hero-mockup {
             width: 280px;
-            height: 580px;
-            background: linear-gradient(160deg, var(--green-light), var(--green), var(--green-dark));
-            border-radius: 40px;
+            height: 560px;
             margin: 0 auto;
-            padding: 3px;
-            box-shadow: 0 30px 80px rgba(27, 67, 50, 0.25), 0 0 0 1px rgba(0,0,0,0.05);
-            position: relative;
+            background: linear-gradient(165deg, #1A3528, #0D1B12);
+            border-radius: 40px;
+            border: 2px solid rgba(82, 183, 136, 0.2);
+            box-shadow:
+                0 40px 80px rgba(0, 0, 0, 0.5),
+                0 0 60px rgba(82, 183, 136, 0.08),
+                inset 0 1px 0 rgba(255,255,255,0.05);
+            animation: float 6s ease-in-out infinite;
+            overflow: hidden;
         }
 
-        .hero-mockup-inner {
-            width: 100%;
-            height: 100%;
-            background: var(--green-dark);
-            border-radius: 38px;
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 28px;
+            background: #0D1B12;
+            border-radius: 0 0 18px 18px;
+            z-index: 2;
+        }
+
+        .phone-screen {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            right: 12px;
+            bottom: 12px;
+            border-radius: 30px;
             overflow: hidden;
+            background: var(--bg-deep);
             display: flex;
             flex-direction: column;
-            padding: 2.5rem 1.5rem 1.5rem;
+            padding: 40px 16px 16px;
         }
 
-        .mockup-header {
-            text-align: center;
-            margin-bottom: 1.5rem;
+        .phone-header {
+            text-align: left;
+            margin-bottom: 16px;
         }
 
-        .mockup-header small {
+        .phone-header small {
             font-size: 0.65rem;
-            color: rgba(255,255,255,0.5);
+            color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.1em;
         }
 
-        .mockup-header h3 {
-            color: white;
-            font-size: 1.8rem;
-            font-weight: 800;
-            margin-top: 0.25rem;
+        .phone-header .amount {
+            font-family: var(--font-headline);
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--green-light);
         }
 
-        .mockup-badge {
-            display: inline-block;
-            background: rgba(255,255,255,0.15);
-            color: white;
-            padding: 0.2rem 0.7rem;
-            border-radius: 100px;
-            font-size: 0.65rem;
-            font-weight: 600;
-            margin-top: 0.5rem;
-        }
-
-        .mockup-chart {
+        .phone-chart {
             flex: 1;
             display: flex;
             align-items: flex-end;
-            padding-bottom: 1rem;
+            gap: 6px;
+            padding: 8px 0;
         }
 
-        .mockup-chart svg {
-            width: 100%;
-            height: 120px;
+        .chart-bar {
+            flex: 1;
+            border-radius: 4px 4px 0 0;
+            transition: var(--transition);
         }
 
-        .mockup-cards {
+        .phone-nav-bar {
             display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
+            justify-content: space-around;
+            padding: 10px 0 4px;
+            border-top: 1px solid var(--border-subtle);
         }
 
-        .mockup-card {
-            background: rgba(255,255,255,0.08);
-            border-radius: 12px;
-            padding: 0.7rem 0.9rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .phone-nav-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--text-muted);
         }
 
-        .mockup-card-label {
-            font-size: 0.7rem;
-            color: rgba(255,255,255,0.6);
+        .phone-nav-dot.active {
+            background: var(--green-light);
         }
 
-        .mockup-card-value {
-            font-size: 0.75rem;
-            color: white;
-            font-weight: 700;
-        }
-
-        .mockup-card-value.positive { color: var(--green-light); }
-        .mockup-card-value.negative { color: #FF8A8A; }
-
-        /* FLOATING CARDS */
-        .float-card {
-            position: absolute;
-            background: white;
-            border-radius: 16px;
-            padding: 1rem 1.2rem;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04);
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .float-card-left {
-            left: 0;
-            top: 30%;
-            animation-delay: -1s;
-        }
-
-        .float-card-right {
-            right: 0;
-            top: 20%;
-            animation-delay: -3s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
-        }
-
-        .float-card .fc-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 0.5rem;
-            font-size: 1rem;
-        }
-
-        .float-card .fc-label {
-            font-size: 0.7rem;
-            color: var(--text-secondary);
-        }
-
-        .float-card .fc-value {
-            font-size: 0.95rem;
-            font-weight: 700;
-        }
-
-        /* SOCIAL PROOF */
-        .social-proof {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 4rem;
-            flex-wrap: wrap;
-        }
-
-        .proof-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-        }
-
-        .proof-item svg {
-            width: 18px;
-            height: 18px;
-            color: var(--green);
-        }
-
-        /* STATS STRIP */
+        /* ========== STATS STRIP ========== */
         .stats {
-            padding: 4rem 2rem;
-            background: white;
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
+            padding: 60px 24px;
+            border-top: 1px solid var(--border-subtle);
+            border-bottom: 1px solid var(--border-subtle);
         }
 
-        .stats-inner {
-            max-width: 1000px;
-            margin: 0 auto;
+        .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
             text-align: center;
         }
 
-        .stat h3 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--green);
-            letter-spacing: -0.02em;
+        .stat-item {
+            padding: 1.5rem;
         }
 
-        .stat p {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-top: 0.25rem;
-        }
-
-        /* FEATURES */
-        .features {
-            padding: 7rem 2rem;
-        }
-
-        .section-header {
-            text-align: center;
-            max-width: 600px;
-            margin: 0 auto 4rem;
-        }
-
-        .section-badge {
-            display: inline-block;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--green);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
+        .stat-icon {
+            font-size: 2rem;
             margin-bottom: 0.75rem;
         }
 
-        .section-header h2 {
-            font-size: clamp(2rem, 4vw, 2.8rem);
-            font-weight: 800;
-            letter-spacing: -0.02em;
-            margin-bottom: 1rem;
+        .stat-title {
+            font-family: var(--font-headline);
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.4rem;
         }
 
-        .section-header p {
+        .stat-desc {
+            font-size: 0.9rem;
             color: var(--text-secondary);
-            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+
+        /* ========== FEATURES ========== */
+        .features {
+            padding: 120px 24px;
+        }
+
+        .features-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .features-header .section-subtitle {
+            margin: 0 auto;
         }
 
         .features-grid {
-            max-width: 1100px;
-            margin: 0 auto;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 1.5rem;
         }
 
         .feature-card {
-            background: white;
-            border-radius: 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: var(--radius-lg);
             padding: 2rem;
-            border: 1px solid var(--border);
-            transition: all 0.3s;
+            transition: var(--transition);
         }
 
         .feature-card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-subtle);
             transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.06);
-            border-color: rgba(45, 106, 79, 0.2);
+            box-shadow: var(--shadow-card), var(--shadow-glow);
         }
 
         .feature-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
+            width: 52px;
+            height: 52px;
+            background: rgba(82, 183, 136, 0.1);
+            border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 1.5rem;
             margin-bottom: 1.25rem;
-            font-size: 1.3rem;
         }
 
         .feature-card h3 {
             font-size: 1.15rem;
-            font-weight: 700;
+            font-weight: 600;
             margin-bottom: 0.5rem;
+            color: var(--text-primary);
         }
 
         .feature-card p {
@@ -565,1037 +563,1207 @@
             line-height: 1.6;
         }
 
-        /* HOW IT WORKS */
+        /* ========== HOW IT WORKS ========== */
         .how-it-works {
-            padding: 7rem 2rem;
-            background: white;
+            padding: 120px 24px;
+            background: linear-gradient(180deg, transparent, rgba(20, 42, 31, 0.4), transparent);
+        }
+
+        .how-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .how-header .section-subtitle {
+            margin: 0 auto;
         }
 
         .steps {
-            max-width: 900px;
-            margin: 0 auto;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 3rem;
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
         }
 
         .step {
             text-align: center;
+            padding: 2rem 1.5rem;
             position: relative;
         }
 
-        .step-num {
-            width: 56px;
-            height: 56px;
-            background: linear-gradient(135deg, var(--green-light), var(--green));
+        .step-number {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--green-primary), var(--green-light));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-family: var(--font-headline);
+            font-size: 1.5rem;
+            font-weight: 700;
             color: white;
-            font-size: 1.2rem;
-            font-weight: 800;
-            margin: 0 auto 1.25rem;
         }
 
         .step h3 {
-            font-size: 1.15rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
         }
 
         .step p {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: var(--text-secondary);
             line-height: 1.6;
         }
 
-        /* DEBT SECTION */
-        .debt-section {
-            padding: 7rem 2rem;
-            position: relative;
-            overflow: hidden;
+        .step-connector {
+            display: none;
         }
 
-        .debt-inner {
-            max-width: 1100px;
+        /* ========== DEBT ENGINE ========== */
+        .debt-engine {
+            padding: 120px 24px;
+        }
+
+        .debt-engine-inner {
+            max-width: 1000px;
             margin: 0 auto;
+        }
+
+        .debt-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .debt-header .section-subtitle {
+            margin: 0 auto;
+        }
+
+        .debt-methods {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
+            gap: 2rem;
         }
 
-        .debt-content h2 {
-            font-size: clamp(2rem, 4vw, 2.8rem);
-            font-weight: 800;
-            letter-spacing: -0.02em;
-            margin-bottom: 1.25rem;
+        .method-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            transition: var(--transition);
         }
 
-        .debt-content > p {
-            color: var(--text-secondary);
-            font-size: 1.05rem;
-            margin-bottom: 2rem;
-            line-height: 1.7;
+        .method-card:hover {
+            border-color: var(--border-subtle);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-card);
         }
 
-        .strategy-cards {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .strategy-card {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 1.25rem 1.5rem;
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            transition: all 0.3s;
-        }
-
-        .strategy-card:hover {
-            border-color: var(--green);
-            box-shadow: 0 4px 20px rgba(45, 106, 79, 0.1);
-        }
-
-        .strategy-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            font-size: 1.2rem;
-        }
-
-        .strategy-card h4 {
-            font-size: 1rem;
-            font-weight: 700;
-            margin-bottom: 0.25rem;
-        }
-
-        .strategy-card p {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
-
-        .debt-visual {
-            position: relative;
-        }
-
-        .debt-mockup {
-            background: var(--bg);
-            border-radius: 24px;
-            border: 1px solid var(--border);
-            padding: 2rem;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.06);
-        }
-
-        .debt-mockup-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .debt-mockup-header h4 {
-            font-size: 1rem;
-            font-weight: 700;
-        }
-
-        .debt-mockup-header span {
-            font-size: 0.75rem;
-            background: rgba(45, 106, 79, 0.1);
-            color: var(--green);
-            padding: 0.25rem 0.75rem;
+        .method-badge {
+            display: inline-flex;
+            padding: 4px 12px;
             border-radius: 100px;
+            font-size: 0.75rem;
             font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 1rem;
         }
 
-        .debt-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.9rem 0;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .debt-item:last-child {
-            border-bottom: none;
-        }
-
-        .debt-rank {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        .debt-rank.first {
-            background: var(--green);
-            color: white;
-        }
-
-        .debt-rank.other {
-            background: var(--bg);
-            color: var(--text-secondary);
-            border: 1px solid var(--border);
-        }
-
-        .debt-info {
-            flex: 1;
-        }
-
-        .debt-info h5 {
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .debt-info small {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
-
-        .debt-amount {
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: var(--rose);
-        }
-
-        .debt-progress {
-            width: 100%;
-            height: 4px;
-            background: var(--border);
-            border-radius: 2px;
-            margin-top: 1.5rem;
-            overflow: hidden;
-        }
-
-        .debt-progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--green-light), var(--green));
-            border-radius: 2px;
-        }
-
-        .debt-progress-label {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 0.5rem;
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
-
-        /* SECURITY */
-        .security {
-            padding: 7rem 2rem;
-            background: var(--green-dark);
-            color: white;
-        }
-
-        .security .section-header h2 {
-            color: white;
-        }
-
-        .security .section-header p {
-            color: rgba(255,255,255,0.6);
-        }
-
-        .security .section-badge {
+        .method-badge.avalanche {
+            background: rgba(82, 183, 136, 0.15);
             color: var(--green-light);
         }
 
-        .security-grid {
-            max-width: 900px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
+        .method-badge.snowball {
+            background: rgba(196, 139, 74, 0.15);
+            color: var(--amber);
+        }
+
+        .method-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .method-card p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1.25rem;
+        }
+
+        .method-stats {
+            display: flex;
             gap: 1.5rem;
         }
 
-        .security-card {
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 16px;
-            padding: 1.5rem;
+        .method-stat {
+            flex: 1;
+            background: rgba(82, 183, 136, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 1rem;
+            text-align: center;
         }
 
-        .security-card h3 {
-            font-size: 1rem;
+        .method-stat .value {
+            font-family: var(--font-headline);
+            font-size: 1.3rem;
             font-weight: 700;
-            margin-bottom: 0.4rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            color: var(--green-light);
         }
 
-        .security-card p {
-            font-size: 0.85rem;
-            color: rgba(255,255,255,0.6);
-            line-height: 1.6;
+        .method-stat .label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
         }
 
-        /* PRICING */
-        .pricing {
-            padding: 7rem 2rem;
+        .debt-bottom-note {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 1.5rem;
+            background: rgba(82, 183, 136, 0.06);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
         }
 
-        .pricing-grid {
-            max-width: 1000px;
+        .debt-bottom-note p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .debt-bottom-note strong {
+            color: var(--green-light);
+        }
+
+        /* ========== SECURITY ========== */
+        .security {
+            padding: 120px 24px;
+            background: linear-gradient(180deg, transparent, rgba(20, 42, 31, 0.4), transparent);
+        }
+
+        .security-inner {
+            max-width: 900px;
             margin: 0 auto;
+            text-align: center;
+        }
+
+        .security-header {
+            margin-bottom: 3.5rem;
+        }
+
+        .security-header .section-subtitle {
+            margin: 0 auto;
+        }
+
+        .security-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 1.5rem;
         }
 
-        .pricing-card {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 2.5rem 2rem;
-            text-align: center;
-            position: relative;
-            transition: all 0.3s;
+        .security-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: var(--radius-lg);
+            padding: 2rem 1.5rem;
+            transition: var(--transition);
         }
 
-        .pricing-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+        .security-item:hover {
+            border-color: var(--border-subtle);
+            transform: translateY(-2px);
         }
 
-        .pricing-card.featured {
-            border-color: var(--green);
-            box-shadow: 0 8px 30px rgba(45, 106, 79, 0.15);
+        .security-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
         }
 
-        .pricing-card.featured::before {
-            content: 'Most Popular';
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--green);
-            color: white;
-            padding: 0.25rem 1rem;
-            border-radius: 100px;
-            font-size: 0.75rem;
+        .security-item h3 {
+            font-size: 1.05rem;
             font-weight: 600;
-        }
-
-        .pricing-card h3 {
-            font-size: 1.25rem;
-            font-weight: 700;
             margin-bottom: 0.5rem;
         }
 
-        .pricing-card .price {
-            font-size: 2.5rem;
-            font-weight: 800;
+        .security-item p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* ========== PRICING ========== */
+        .pricing {
+            padding: 120px 24px;
+        }
+
+        .pricing-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .pricing-header .section-subtitle {
+            margin: 0 auto;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            max-width: 1050px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: var(--radius-xl);
+            padding: 2.5rem 2rem;
+            transition: var(--transition);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pricing-card:hover {
+            border-color: var(--border-subtle);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-card);
+        }
+
+        .pricing-card.featured {
+            border-color: var(--green-light);
+            background: linear-gradient(165deg, rgba(45, 106, 79, 0.2), var(--bg-card));
+            box-shadow: 0 0 50px rgba(82, 183, 136, 0.1);
+        }
+
+        .pricing-popular {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 6px 20px;
+            background: linear-gradient(135deg, var(--green-primary), var(--green-light));
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-radius: 100px;
+            white-space: nowrap;
+        }
+
+        .pricing-tier {
+            font-family: var(--font-headline);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--green-light);
+            margin-bottom: 0.75rem;
+        }
+
+        .pricing-amount {
+            font-family: var(--font-headline);
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--text-primary);
             margin-bottom: 0.25rem;
         }
 
-        .pricing-card .price span {
+        .pricing-amount .per {
             font-size: 1rem;
-            font-weight: 500;
-            color: var(--text-secondary);
+            font-weight: 400;
+            color: var(--text-muted);
         }
 
-        .pricing-card .annual {
-            font-size: 0.8rem;
+        .pricing-desc {
+            font-size: 0.9rem;
             color: var(--text-secondary);
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            line-height: 1.5;
         }
 
         .pricing-features {
             list-style: none;
-            text-align: left;
             margin-bottom: 2rem;
+            flex: 1;
         }
 
         .pricing-features li {
-            padding: 0.4rem 0;
+            padding: 0.5rem 0;
             font-size: 0.9rem;
             color: var(--text-secondary);
             display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            align-items: flex-start;
+            gap: 0.75rem;
         }
 
         .pricing-features li::before {
-            content: '✓';
-            color: var(--green);
+            content: '\2713';
+            color: var(--green-light);
             font-weight: 700;
-            font-size: 0.85rem;
+            flex-shrink: 0;
+            margin-top: 1px;
         }
 
         .pricing-btn {
             display: block;
             width: 100%;
-            padding: 0.8rem;
-            border-radius: 100px;
-            text-decoration: none;
-            font-weight: 600;
+            padding: 14px;
+            text-align: center;
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
             font-size: 0.95rem;
-            text-align: center;
-            transition: all 0.2s;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
         }
 
-        .pricing-btn-primary {
-            background: var(--green);
+        .pricing-btn.primary {
+            background: linear-gradient(135deg, var(--green-primary), var(--green-light));
             color: white;
         }
 
-        .pricing-btn-primary:hover {
-            box-shadow: 0 4px 16px rgba(45, 106, 79, 0.3);
+        .pricing-btn.primary:hover {
+            box-shadow: 0 4px 20px rgba(82, 183, 136, 0.3);
+            transform: translateY(-1px);
         }
 
-        .pricing-btn-secondary {
-            background: var(--bg);
-            color: var(--text);
-            border: 1px solid var(--border);
+        .pricing-btn.outline {
+            background: transparent;
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
         }
 
-        .pricing-btn-secondary:hover {
-            border-color: var(--green);
+        .pricing-btn.outline:hover {
+            background: rgba(82, 183, 136, 0.08);
+            border-color: var(--green-light);
         }
 
-        /* CTA */
+        /* ========== CONTACT ========== */
+        .contact {
+            padding: 120px 24px;
+            background: linear-gradient(180deg, transparent, rgba(20, 42, 31, 0.4), transparent);
+        }
+
+        .contact-inner {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .contact-header .section-subtitle {
+            margin: 0 auto;
+        }
+
+        .contact-form {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: var(--radius-xl);
+            padding: 2.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(13, 27, 18, 0.6);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            transition: var(--transition);
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--green-light);
+            box-shadow: 0 0 0 3px rgba(82, 183, 136, 0.1);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-submit {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--green-primary), var(--green-light));
+            color: white;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .form-submit:hover {
+            box-shadow: 0 4px 20px rgba(82, 183, 136, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .form-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-success {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .form-success.show {
+            display: block;
+        }
+
+        .form-success .check-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(82, 183, 136, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.8rem;
+        }
+
+        .form-success h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-success p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* ========== FINAL CTA ========== */
         .final-cta {
-            padding: 7rem 2rem;
+            padding: 120px 24px;
             text-align: center;
-            background: linear-gradient(135deg, var(--green-light), var(--green), var(--green-dark));
-            color: white;
-            position: relative;
-            overflow: hidden;
         }
 
-        .final-cta::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.08), transparent 60%);
+        .final-cta-inner {
+            max-width: 700px;
+            margin: 0 auto;
+            background: linear-gradient(165deg, rgba(45, 106, 79, 0.2), var(--bg-card));
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            padding: 4rem 3rem;
         }
 
         .final-cta h2 {
-            font-size: clamp(2rem, 4vw, 3rem);
-            font-weight: 800;
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            font-weight: 700;
             letter-spacing: -0.02em;
             margin-bottom: 1rem;
-            position: relative;
         }
 
         .final-cta p {
-            font-size: 1.15rem;
-            opacity: 0.85;
-            max-width: 500px;
-            margin: 0 auto 2rem;
-            position: relative;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
         }
 
-        .btn-white {
+        .download-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .app-store-btn {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 12px;
+            padding: 14px 28px;
             background: white;
-            color: var(--green-dark);
-            padding: 0.9rem 2rem;
-            border-radius: 100px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 1rem;
-            transition: all 0.2s;
-            position: relative;
-        }
-
-        .btn-white:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
-        }
-
-        /* CONTACT */
-        .contact-section {
-            padding: 5rem 2rem;
-            text-align: center;
-            background: var(--bg);
-        }
-        .contact-form {
-            max-width: 480px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-        .contact-form input,
-        .contact-form textarea {
-            width: 100%;
-            padding: 0.85rem 1rem;
-            border-radius: 10px;
-            border: 1px solid #E5E7EB;
-            background: #fff;
-            color: #1B4332;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            outline: none;
-            transition: border-color 0.2s;
-            box-sizing: border-box;
-        }
-        .contact-form input::placeholder,
-        .contact-form textarea::placeholder {
-            color: #9CA3AF;
-        }
-        .contact-form input:focus,
-        .contact-form textarea:focus {
-            border-color: var(--green);
-        }
-        .contact-form textarea {
-            resize: vertical;
-            min-height: 120px;
-        }
-        .contact-form .btn-primary {
-            align-self: center;
-        }
-        .contact-success {
-            color: var(--green);
+            color: #000;
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
             font-weight: 600;
-            display: none;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            text-decoration: none;
         }
 
-        /* FOOTER */
-        footer {
-            padding: 3rem 2rem;
-            background: var(--green-dark);
-            color: rgba(255,255,255,0.5);
-            text-align: center;
+        .app-store-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(255, 255, 255, 0.1);
+        }
+
+        .app-store-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .app-store-btn .store-text {
+            text-align: left;
+            line-height: 1.2;
+        }
+
+        .app-store-btn .store-text small {
+            font-size: 0.65rem;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.7;
+            display: block;
+        }
+
+        .app-store-btn .store-text span {
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        /* ========== FOOTER ========== */
+        .footer {
+            padding: 40px 24px;
+            border-top: 1px solid var(--border-subtle);
         }
 
         .footer-inner {
             max-width: 1200px;
             margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
         }
 
         .footer-links {
             display: flex;
-            justify-content: center;
             gap: 2rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
+            list-style: none;
         }
 
         .footer-links a {
-            color: rgba(255,255,255,0.5);
-            text-decoration: none;
             font-size: 0.85rem;
-            transition: color 0.2s;
+            color: var(--text-muted);
+            transition: color var(--transition);
         }
 
         .footer-links a:hover {
-            color: white;
+            color: var(--green-light);
         }
 
-        footer p {
-            font-size: 0.8rem;
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 900px) {
-            .features-grid,
-            .pricing-grid {
-                grid-template-columns: 1fr;
-                max-width: 400px;
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-            .steps {
-                grid-template-columns: 1fr;
-                max-width: 400px;
-            }
-
-            .debt-inner {
-                grid-template-columns: 1fr;
-            }
-
-            .debt-visual {
-                order: -1;
-            }
-
-            .stats-inner {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-
-            .security-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .float-card {
-                display: none;
-            }
-
-            .hero {
-                padding: 8rem 1.5rem 4rem;
-            }
-        }
-
+        /* ========== RESPONSIVE ========== */
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
             }
 
-            .mobile-menu-btn {
-                display: block;
+            .hero {
+                padding: 130px 20px 80px;
             }
 
-            .nav-links.active {
-                display: flex;
+            .hero h1 {
+                font-size: clamp(2.2rem, 8vw, 3rem);
+            }
+
+            .hero p {
+                font-size: 1.05rem;
+            }
+
+            .hero-ctas {
                 flex-direction: column;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: white;
-                padding: 1.5rem 2rem;
-                border-bottom: 1px solid var(--border);
-                box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+                align-items: center;
+            }
+
+            .hero-phone {
+                width: 220px;
+                height: 440px;
+            }
+
+            .phone-notch {
+                width: 90px;
+                height: 22px;
+            }
+
+            .phone-header .amount {
+                font-size: 1.3rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .steps {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .debt-methods {
+                grid-template-columns: 1fr;
+            }
+
+            .method-stats {
+                flex-direction: column;
+            }
+
+            .security-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                gap: 2rem;
+            }
+
+            .contact-form {
+                padding: 1.5rem;
+            }
+
+            .final-cta-inner {
+                padding: 3rem 1.5rem;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                text-align: center;
             }
         }
 
-        /* ANIMATIONS */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s, transform 0.6s;
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .security-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .pricing-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .pricing-card:last-child {
+                grid-column: 1 / -1;
+                max-width: 360px;
+                margin: 0 auto;
+            }
         }
 
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
+        /* Scroll to top indicator */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--green-primary), var(--green-light));
+            z-index: 1001;
+            transition: width 0.1s linear;
         }
     </style>
 </head>
 <body>
 
-    <!-- NAV -->
-    <nav>
-        <div class="nav-inner">
-            <a href="#" class="logo">
-                <div class="logo-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
-                        <polyline points="16 7 22 7 22 13"/>
-                    </svg>
-                </div>
-                <span>WealthPilot</span>
-            </a>
-            <ul class="nav-links" id="navLinks">
-                <li><a href="#features">Features</a></li>
-                <li><a href="#how-it-works">How It Works</a></li>
-                <li><a href="#pricing">Pricing</a></li>
-                <li><a href="#security">Security</a></li>
-                <li><a href="#download" class="nav-cta">Download</a></li>
-            </ul>
-            <button class="mobile-menu-btn" onclick="document.getElementById('navLinks').classList.toggle('active')" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </nav>
+<!-- Scroll Progress -->
+<div class="scroll-progress" id="scrollProgress"></div>
 
-    <!-- HERO -->
-    <section class="hero" id="home">
-        <div class="hero-badge">Coming Soon to the App Store</div>
-        <h1>The app that gets<br>you <span class="gradient-text">out of debt.</span></h1>
-        <p>WealthPilot combines all your accounts with smart payoff strategies so you can crush debt faster and start building real wealth.</p>
-        <div class="hero-ctas">
+<!-- Navigation -->
+<nav class="nav" id="nav">
+    <div class="nav-inner">
+        <a href="#" class="nav-logo">
+            <div class="nav-logo-icon">W</div>
+            WealthPilot
+        </a>
+        <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#download">Download</a></li>
+        </ul>
+        <a href="#download" class="nav-cta">Get the App</a>
+    </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+    <div class="hero-content">
+        <div class="hero-badge fade-in">Coming Soon to the App Store</div>
+        <h1 class="fade-in fade-in-delay-1">
+            Your <span class="gradient-text">debt-free</span> journey starts here.
+        </h1>
+        <p class="fade-in fade-in-delay-2">
+            Smart debt payoff strategies, all your accounts in one place, and AI-powered insights to help you build real wealth.
+        </p>
+        <div class="hero-ctas fade-in fade-in-delay-3">
             <a href="#download" class="btn-primary">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-                Get WealthPilot
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Download App
             </a>
-            <a href="#features" class="btn-secondary">See How It Works</a>
+            <a href="#features" class="btn-secondary">
+                Learn More
+            </a>
         </div>
 
         <!-- Phone Mockup -->
-        <div class="hero-visual">
-            <div class="float-card float-card-left">
-                <div class="fc-icon" style="background: rgba(45,106,79,0.1);">📈</div>
-                <div class="fc-label">Net Worth</div>
-                <div class="fc-value" style="color: var(--green);">+12.4%</div>
-            </div>
-            <div class="float-card float-card-right">
-                <div class="fc-icon" style="background: rgba(196,139,74,0.1);">💡</div>
-                <div class="fc-label">Insight</div>
-                <div class="fc-value" style="color: var(--amber);">Save $240/mo</div>
-            </div>
-
-            <div class="hero-mockup">
-                <div class="hero-mockup-inner">
-                    <div class="mockup-header">
-                        <small>Net Worth</small>
-                        <h3>$47,230</h3>
-                        <div class="mockup-badge">▲ 8.2% this month</div>
-                    </div>
-                    <div class="mockup-chart">
-                        <svg viewBox="0 0 250 100" preserveAspectRatio="none">
-                            <defs>
-                                <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stop-color="rgba(255,255,255,0.2)"/>
-                                    <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
-                                </linearGradient>
-                            </defs>
-                            <path d="M0 80 Q30 75 50 60 T100 45 T150 35 T200 25 T250 15 V100 H0 Z" fill="url(#chartGrad)"/>
-                            <path d="M0 80 Q30 75 50 60 T100 45 T150 35 T200 25 T250 15" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-                    <div class="mockup-cards">
-                        <div class="mockup-card">
-                            <span class="mockup-card-label">Income</span>
-                            <span class="mockup-card-value positive">+$5,200</span>
-                        </div>
-                        <div class="mockup-card">
-                            <span class="mockup-card-label">Spending</span>
-                            <span class="mockup-card-value negative">-$3,180</span>
-                        </div>
-                    </div>
+        <div class="hero-phone fade-in fade-in-delay-4">
+            <div class="phone-notch"></div>
+            <div class="phone-screen">
+                <div class="phone-header">
+                    <small>Net Worth</small>
+                    <div class="amount">$47,250</div>
+                </div>
+                <div class="phone-chart">
+                    <div class="chart-bar" style="height:30%;background:var(--green-primary)"></div>
+                    <div class="chart-bar" style="height:45%;background:var(--green-primary)"></div>
+                    <div class="chart-bar" style="height:35%;background:var(--green-primary)"></div>
+                    <div class="chart-bar" style="height:55%;background:var(--green-light)"></div>
+                    <div class="chart-bar" style="height:50%;background:var(--green-light)"></div>
+                    <div class="chart-bar" style="height:65%;background:var(--green-light)"></div>
+                    <div class="chart-bar" style="height:60%;background:var(--green-light)"></div>
+                    <div class="chart-bar" style="height:75%;background:var(--green-bright)"></div>
+                    <div class="chart-bar" style="height:70%;background:var(--green-bright)"></div>
+                    <div class="chart-bar" style="height:85%;background:var(--green-bright)"></div>
+                </div>
+                <div class="phone-nav-bar">
+                    <div class="phone-nav-dot active"></div>
+                    <div class="phone-nav-dot"></div>
+                    <div class="phone-nav-dot"></div>
+                    <div class="phone-nav-dot"></div>
                 </div>
             </div>
         </div>
+    </div>
+</section>
 
-        <div class="social-proof">
-            <div class="proof-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                Bank-grade encryption
+<!-- Stats Strip -->
+<section class="stats">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-item fade-in">
+                <div class="stat-icon">&#9889;</div>
+                <div class="stat-title">Smart Debt Strategies</div>
+                <div class="stat-desc">Avalanche and snowball methods powered by intelligent algorithms</div>
             </div>
-            <div class="proof-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-                iOS 17+ native app
+            <div class="stat-item fade-in fade-in-delay-1">
+                <div class="stat-icon">&#128206;</div>
+                <div class="stat-title">All Accounts in One Place</div>
+                <div class="stat-desc">Banks, credit cards, loans, and investments unified in a single dashboard</div>
             </div>
-            <div class="proof-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                Privacy-first design
+            <div class="stat-item fade-in fade-in-delay-2">
+                <div class="stat-icon">&#129504;</div>
+                <div class="stat-title">AI-Powered Insights</div>
+                <div class="stat-desc">Personalized recommendations that actually help you save more</div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- STATS -->
-    <section class="stats">
-        <div class="stats-inner">
-            <div class="stat fade-in">
-                <h3>77%</h3>
-                <p>of U.S. households carry debt</p>
-            </div>
-            <div class="stat fade-in">
-                <h3>$104K</h3>
-                <p>average household debt</p>
-            </div>
-            <div class="stat fade-in">
-                <h3>2x</h3>
-                <p>faster payoff with a strategy</p>
-            </div>
+<!-- Features -->
+<section class="features" id="features">
+    <div class="container">
+        <div class="features-header">
+            <div class="section-label fade-in">Features</div>
+            <h2 class="section-title fade-in fade-in-delay-1">Everything you need to <span class="gradient-text">take control</span></h2>
+            <p class="section-subtitle fade-in fade-in-delay-2">A complete financial toolkit designed to help you eliminate debt and grow your wealth.</p>
         </div>
-    </section>
-
-    <!-- FEATURES -->
-    <section class="features" id="features">
-        <div class="section-header">
-            <div class="section-badge">Features</div>
-            <h2>Everything you need to take control</h2>
-            <p>Smart tools that make managing money feel effortless, not overwhelming.</p>
-        </div>
-
         <div class="features-grid">
             <div class="feature-card fade-in">
-                <div class="feature-icon" style="background: rgba(45,106,79,0.1);">🏦</div>
-                <h3>All Accounts, One View</h3>
-                <p>Connect banks, credit cards, loans, and investments automatically with Plaid — or add them manually for free.</p>
+                <div class="feature-icon">&#127974;</div>
+                <h3>All Accounts</h3>
+                <p>Link every bank account, credit card, and investment in one secure place. See your full financial picture at a glance.</p>
             </div>
-            <div class="feature-card fade-in">
-                <div class="feature-icon" style="background: rgba(196,139,74,0.1);">⚡</div>
-                <h3>Smart Debt Payoff</h3>
-                <p>Choose Avalanche (save the most) or Snowball (quick wins) and get a custom payment priority plan.</p>
+            <div class="feature-card fade-in fade-in-delay-1">
+                <div class="feature-icon">&#128161;</div>
+                <h3>Smart Insights</h3>
+                <p>AI-driven recommendations tailored to your spending habits, income patterns, and financial goals.</p>
             </div>
-            <div class="feature-card fade-in">
-                <div class="feature-icon" style="background: rgba(124,111,156,0.1);">💡</div>
-                <h3>Personalized Insights</h3>
-                <p>AI-powered recommendations that spot savings opportunities, flag unusual spending, and optimize your money.</p>
+            <div class="feature-card fade-in fade-in-delay-2">
+                <div class="feature-icon">&#128640;</div>
+                <h3>Debt Payoff Engine</h3>
+                <p>Choose avalanche or snowball. Our engine calculates the fastest, cheapest path to becoming debt-free.</p>
             </div>
-            <div class="feature-card fade-in">
-                <div class="feature-icon" style="background: rgba(199,125,106,0.1);">📊</div>
+            <div class="feature-card fade-in fade-in-delay-3">
+                <div class="feature-icon">&#128200;</div>
                 <h3>Net Worth Tracking</h3>
-                <p>Watch your wealth grow over time with interactive charts. See exactly how your assets and debts change.</p>
+                <p>Watch your net worth grow over time with beautiful charts and milestone celebrations.</p>
             </div>
-            <div class="feature-card fade-in">
-                <div class="feature-icon" style="background: rgba(82,183,136,0.1);">🍎</div>
-                <h3>Apple Wallet Integration</h3>
-                <p>Import Apple Card, Apple Cash, and Apple Savings directly — no third-party connection needed.</p>
+            <div class="feature-card fade-in fade-in-delay-4">
+                <div class="feature-icon">&#128276;</div>
+                <h3>Bill Reminders</h3>
+                <p>Never miss a payment. Smart notifications keep you ahead of every due date.</p>
             </div>
-            <div class="feature-card fade-in">
-                <div class="feature-icon" style="background: rgba(45,106,79,0.1);">📅</div>
-                <h3>Bill Calendar</h3>
-                <p>Never miss a payment. See upcoming bills, get urgency alerts, and track your debt-free date.</p>
+            <div class="feature-card fade-in fade-in-delay-5">
+                <div class="feature-icon">&#128274;</div>
+                <h3>Bank-Grade Security</h3>
+                <p>256-bit AES encryption, biometric authentication, and on-device data protection.</p>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- HOW IT WORKS -->
-    <section class="how-it-works" id="how-it-works">
-        <div class="section-header">
-            <div class="section-badge">How It Works</div>
-            <h2>Three steps to financial freedom</h2>
-            <p>Getting started takes less than two minutes.</p>
+<!-- How It Works -->
+<section class="how-it-works" id="how-it-works">
+    <div class="container">
+        <div class="how-header">
+            <div class="section-label fade-in">How It Works</div>
+            <h2 class="section-title fade-in fade-in-delay-1">Three steps to <span class="gradient-text">financial freedom</span></h2>
+            <p class="section-subtitle fade-in fade-in-delay-2">Getting started takes less than two minutes.</p>
         </div>
-
         <div class="steps">
             <div class="step fade-in">
-                <div class="step-num">1</div>
+                <div class="step-number">1</div>
                 <h3>Connect Your Accounts</h3>
-                <p>Link your banks with Plaid, import Apple Wallet, or add accounts manually. All methods work with the full feature set.</p>
+                <p>Securely link your banks, credit cards, and loans through our encrypted connection.</p>
             </div>
-            <div class="step fade-in">
-                <div class="step-num">2</div>
-                <h3>Pick Your Strategy</h3>
-                <p>Choose Avalanche to save the most on interest, or Snowball for motivating quick wins. We'll rank your debts automatically.</p>
+            <div class="step fade-in fade-in-delay-1">
+                <div class="step-number">2</div>
+                <h3>Get Your Plan</h3>
+                <p>WealthPilot analyzes your finances and builds a personalized debt payoff strategy.</p>
             </div>
-            <div class="step fade-in">
-                <div class="step-num">3</div>
-                <h3>Watch Your Debt Shrink</h3>
-                <p>Follow your personalized plan, get smart insights along the way, and track your debt-free countdown in real time.</p>
+            <div class="step fade-in fade-in-delay-2">
+                <div class="step-number">3</div>
+                <h3>Watch Your Wealth Grow</h3>
+                <p>Follow your plan, track your progress, and celebrate each milestone on your journey.</p>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- DEBT SECTION -->
-    <section class="debt-section">
-        <div class="debt-inner">
-            <div class="debt-content fade-in">
-                <div class="section-badge">Debt Payoff Engine</div>
-                <h2>Two proven strategies. One clear path.</h2>
-                <p>Whether you want to save the most money or get quick motivational wins, WealthPilot builds a custom plan that actually works.</p>
-
-                <div class="strategy-cards">
-                    <div class="strategy-card">
-                        <div class="strategy-icon" style="background: rgba(45,106,79,0.1);">🏔️</div>
-                        <div>
-                            <h4>Avalanche Method</h4>
-                            <p>Attack highest interest rates first. Mathematically optimal — saves you the most money over time.</p>
-                        </div>
+<!-- Debt Payoff Engine -->
+<section class="debt-engine" id="debt-engine">
+    <div class="debt-engine-inner">
+        <div class="debt-header">
+            <div class="section-label fade-in">Debt Payoff Engine</div>
+            <h2 class="section-title fade-in fade-in-delay-1">Two proven methods. <span class="gradient-text">One goal.</span></h2>
+            <p class="section-subtitle fade-in fade-in-delay-2">Choose the strategy that matches your mindset, and let WealthPilot handle the math.</p>
+        </div>
+        <div class="debt-methods">
+            <div class="method-card fade-in">
+                <div class="method-badge avalanche">Avalanche Method</div>
+                <h3>Save the Most Money</h3>
+                <p>Targets your highest-interest debt first, minimizing total interest paid over time. The mathematically optimal choice.</p>
+                <div class="method-stats">
+                    <div class="method-stat">
+                        <div class="value">Lowest</div>
+                        <div class="label">Total Interest</div>
                     </div>
-                    <div class="strategy-card">
-                        <div class="strategy-icon" style="background: rgba(196,139,74,0.1);">⛷️</div>
-                        <div>
-                            <h4>Snowball Method</h4>
-                            <p>Pay off smallest balances first. The quick wins keep you motivated and build unstoppable momentum.</p>
-                        </div>
+                    <div class="method-stat">
+                        <div class="value">Fastest</div>
+                        <div class="label">Overall Payoff</div>
                     </div>
                 </div>
             </div>
-
-            <div class="debt-visual fade-in">
-                <div class="debt-mockup">
-                    <div class="debt-mockup-header">
-                        <h4>Payment Priority</h4>
-                        <span>Avalanche</span>
+            <div class="method-card fade-in fade-in-delay-1">
+                <div class="method-badge snowball">Snowball Method</div>
+                <h3>Build Momentum Fast</h3>
+                <p>Pays off your smallest balance first for quick wins that keep you motivated. The behavioral psychology choice.</p>
+                <div class="method-stats">
+                    <div class="method-stat">
+                        <div class="value">Quick</div>
+                        <div class="label">Early Wins</div>
                     </div>
-
-                    <div class="debt-item">
-                        <div class="debt-rank first">★</div>
-                        <div class="debt-info">
-                            <h5>Chase Sapphire</h5>
-                            <small>24.99% APR</small>
-                        </div>
-                        <div class="debt-amount">$4,280</div>
-                    </div>
-                    <div class="debt-item">
-                        <div class="debt-rank other">2</div>
-                        <div class="debt-info">
-                            <h5>Capital One Venture</h5>
-                            <small>19.74% APR</small>
-                        </div>
-                        <div class="debt-amount">$2,150</div>
-                    </div>
-                    <div class="debt-item">
-                        <div class="debt-rank other">3</div>
-                        <div class="debt-info">
-                            <h5>Student Loan</h5>
-                            <small>5.50% APR</small>
-                        </div>
-                        <div class="debt-amount">$18,400</div>
-                    </div>
-
-                    <div class="debt-progress">
-                        <div class="debt-progress-fill" style="width: 34%;"></div>
-                    </div>
-                    <div class="debt-progress-label">
-                        <span>$8,470 paid off</span>
-                        <span>Debt-free: Mar 2028</span>
+                    <div class="method-stat">
+                        <div class="value">High</div>
+                        <div class="label">Motivation</div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-
-    <!-- SECURITY -->
-    <section class="security" id="security">
-        <div class="section-header">
-            <div class="section-badge">Security</div>
-            <h2>Bank-grade protection, built in</h2>
-            <p>Your financial data deserves the same security as the banks themselves.</p>
+        <div class="debt-bottom-note fade-in">
+            <p><strong>Not sure which to pick?</strong> WealthPilot recommends the best strategy based on your unique debt profile and personality.</p>
         </div>
+    </div>
+</section>
 
+<!-- Security -->
+<section class="security" id="security">
+    <div class="security-inner">
+        <div class="security-header">
+            <div class="section-label fade-in">Security</div>
+            <h2 class="section-title fade-in fade-in-delay-1">Your data is <span class="gradient-text">fortress-protected</span></h2>
+            <p class="section-subtitle fade-in fade-in-delay-2">We use the same security standards as major banks and financial institutions.</p>
+        </div>
         <div class="security-grid">
-            <div class="security-card fade-in">
-                <h3>🔒 AES-256 Encryption</h3>
-                <p>All data encrypted at rest on your device using Apple's NSFileProtectionComplete — the same standard used by financial institutions.</p>
+            <div class="security-item fade-in">
+                <div class="security-icon">&#128272;</div>
+                <h3>256-Bit AES Encryption</h3>
+                <p>All data encrypted at rest and in transit with military-grade AES-256 encryption.</p>
             </div>
-            <div class="security-card fade-in">
-                <h3>🔑 Secure Keychain</h3>
-                <p>Authentication tokens stored in the iOS Keychain with device-only access. Your credentials never leave your phone.</p>
+            <div class="security-item fade-in fade-in-delay-1">
+                <div class="security-icon">&#129529;</div>
+                <h3>Biometric Authentication</h3>
+                <p>Face ID and Touch ID support ensure only you can access your financial data.</p>
             </div>
-            <div class="security-card fade-in">
-                <h3>🛡️ Plaid Security</h3>
-                <p>Bank connections handled by Plaid — the same infrastructure trusted by Venmo, Robinhood, and thousands of financial apps.</p>
+            <div class="security-item fade-in fade-in-delay-2">
+                <div class="security-icon">&#128241;</div>
+                <h3>On-Device Protection</h3>
+                <p>Sensitive data stays on your device with Apple's NSFileProtectionComplete standard.</p>
             </div>
-            <div class="security-card fade-in">
-                <h3>📱 Local-First</h3>
-                <p>Your financial data lives on your device, not our servers. We can't see your balances, transactions, or accounts.</p>
+            <div class="security-item fade-in fade-in-delay-3">
+                <div class="security-icon">&#128737;</div>
+                <h3>Secure Keychain</h3>
+                <p>Authentication tokens stored in iOS Keychain, inaccessible even if device is compromised.</p>
+            </div>
+            <div class="security-item fade-in fade-in-delay-4">
+                <div class="security-icon">&#128275;</div>
+                <h3>TLS 1.2+ Transport</h3>
+                <p>Every network request uses HTTPS with modern TLS protocols. No exceptions.</p>
+            </div>
+            <div class="security-item fade-in fade-in-delay-5">
+                <div class="security-icon">&#128736;</div>
+                <h3>Zero Data Selling</h3>
+                <p>Your financial data is never sold, shared, or used for advertising. Period.</p>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- PRICING -->
-    <section class="pricing" id="pricing">
-        <div class="section-header">
-            <div class="section-badge">Pricing</div>
-            <h2>Start free. Upgrade when you're ready.</h2>
-            <p>The core debt payoff engine is free forever. No tricks.</p>
+<!-- Pricing -->
+<section class="pricing" id="pricing">
+    <div class="container">
+        <div class="pricing-header">
+            <div class="section-label fade-in">Pricing</div>
+            <h2 class="section-title fade-in fade-in-delay-1">Simple, <span class="gradient-text">transparent</span> pricing</h2>
+            <p class="section-subtitle fade-in fade-in-delay-2">Start free. Upgrade when you're ready to unlock the full power of WealthPilot.</p>
         </div>
-
         <div class="pricing-grid">
+            <!-- Free -->
             <div class="pricing-card fade-in">
-                <h3>Free</h3>
-                <div class="price">$0</div>
-                <div class="annual">Free forever</div>
+                <div class="pricing-tier">Free</div>
+                <div class="pricing-amount">$0<span class="per">/mo</span></div>
+                <div class="pricing-desc">Perfect for getting started with your debt-free journey.</div>
                 <ul class="pricing-features">
-                    <li>Unlimited manual accounts</li>
-                    <li>Debt payoff plan</li>
-                    <li>Avalanche & Snowball strategies</li>
-                    <li>3 insights per month</li>
-                    <li>3-month history</li>
-                </ul>
-                <a href="#download" class="pricing-btn pricing-btn-secondary">Get Started</a>
-            </div>
-            <div class="pricing-card featured fade-in">
-                <h3>Basic</h3>
-                <div class="price">$7.99<span>/mo</span></div>
-                <div class="annual">or $59.99/year (save 37%)</div>
-                <ul class="pricing-features">
-                    <li>5 Plaid bank connections</li>
-                    <li>Unlimited AI insights</li>
+                    <li>Up to 2 linked accounts</li>
+                    <li>Basic debt payoff plan</li>
+                    <li>Net worth tracking</li>
+                    <li>Monthly spending summary</li>
                     <li>Bill reminders</li>
-                    <li>12-month history</li>
-                    <li>Everything in Free</li>
                 </ul>
-                <a href="#download" class="pricing-btn pricing-btn-primary">Start Free Trial</a>
+                <a href="#download" class="pricing-btn outline">Get Started Free</a>
             </div>
-            <div class="pricing-card fade-in">
-                <h3>Pro</h3>
-                <div class="price">$12.99<span>/mo</span></div>
-                <div class="annual">or $99.99/year (save 36%)</div>
+            <!-- Pro -->
+            <div class="pricing-card featured fade-in fade-in-delay-1">
+                <div class="pricing-popular">Most Popular</div>
+                <div class="pricing-tier">Pro</div>
+                <div class="pricing-amount">$4.99<span class="per">/mo</span></div>
+                <div class="pricing-desc">For serious planners who want the full toolkit.</div>
                 <ul class="pricing-features">
-                    <li>Unlimited Plaid connections</li>
-                    <li>Unlimited everything</li>
+                    <li>Unlimited linked accounts</li>
+                    <li>Advanced debt strategies</li>
+                    <li>AI-powered insights</li>
+                    <li>Custom budgets &amp; goals</li>
+                    <li>Detailed analytics</li>
                     <li>Priority support</li>
-                    <li>Full history</li>
-                    <li>Early access to new features</li>
                 </ul>
-                <a href="#download" class="pricing-btn pricing-btn-secondary">Start Free Trial</a>
+                <a href="#download" class="pricing-btn primary">Start Free Trial</a>
+            </div>
+            <!-- Premium -->
+            <div class="pricing-card fade-in fade-in-delay-2">
+                <div class="pricing-tier">Premium</div>
+                <div class="pricing-amount">$9.99<span class="per">/mo</span></div>
+                <div class="pricing-desc">The ultimate financial command center.</div>
+                <ul class="pricing-features">
+                    <li>Everything in Pro</li>
+                    <li>Family sharing (up to 5)</li>
+                    <li>Investment tracking</li>
+                    <li>Tax-loss harvesting insights</li>
+                    <li>Wealth projections</li>
+                    <li>Dedicated support</li>
+                </ul>
+                <a href="#download" class="pricing-btn outline">Go Premium</a>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- FINAL CTA -->
-    <section class="final-cta" id="download">
-        <h2>Your debt-free life starts here.</h2>
-        <p>Join thousands building a smarter relationship with money. Download WealthPilot today.</p>
-        <a href="#" class="btn-white">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-            Download for iOS
-        </a>
-    </section>
-
-    <!-- CONTACT -->
-    <section class="contact-section fade-in" id="contact">
-        <div style="font-size:2.5rem;margin-bottom:1rem;">&#9993;</div>
-        <h2 style="font-size:2rem;font-weight:800;margin-bottom:0.75rem;color:#1B4332;">Send Us a Message</h2>
-        <p style="color:#6B7280;max-width:480px;margin:0 auto 1.5rem;">Have a question, feedback, or just want to say hi? We'd love to hear from you.</p>
-        <form class="contact-form" id="contactForm" action="https://formspree.io/f/mgonopba" method="POST">
-            <input type="text" name="name" placeholder="Your name" required>
-            <input type="email" name="email" placeholder="Your email" required>
-            <textarea name="message" placeholder="Your message..." required></textarea>
-            <button type="submit" class="btn-primary" style="font-size:1rem;padding:0.85rem 2.2rem;cursor:pointer;border:none;">Send Message</button>
-        </form>
-        <p class="contact-success" id="contactSuccess">Thanks! Your message has been sent.</p>
-    </section>
-
-    <!-- FOOTER -->
-    <footer>
-        <div class="footer-inner">
-            <div class="footer-links">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-                <a href="#contact">Contact</a>
-            </div>
-            <p>&copy; 2026 WealthPilot. All rights reserved. Not financial advice.</p>
+<!-- Contact -->
+<section class="contact" id="contact">
+    <div class="contact-inner">
+        <div class="contact-header">
+            <div class="section-label fade-in">Contact</div>
+            <h2 class="section-title fade-in fade-in-delay-1">Send us a <span class="gradient-text">message</span></h2>
+            <p class="section-subtitle fade-in fade-in-delay-2">Have a question, feature request, or feedback? We'd love to hear from you.</p>
         </div>
-    </footer>
+        <div class="contact-form fade-in fade-in-delay-3" id="contactFormWrapper">
+            <form id="contactForm" action="https://formspree.io/f/mgonopba" method="POST">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Your name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" placeholder="Tell us what's on your mind..." required></textarea>
+                </div>
+                <button type="submit" class="form-submit" id="submitBtn">Send Message</button>
+            </form>
+            <div class="form-success" id="formSuccess">
+                <div class="check-icon">&#10003;</div>
+                <h3>Message Sent!</h3>
+                <p>Thanks for reaching out. We'll get back to you shortly.</p>
+            </div>
+        </div>
+    </div>
+</section>
 
-    <script>
-        // Intersection Observer for fade-in animations
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.15 });
+<!-- Final CTA -->
+<section class="final-cta" id="download">
+    <div class="final-cta-inner fade-in">
+        <div class="section-label">Download</div>
+        <h2>Ready to become <span class="gradient-text">debt-free</span>?</h2>
+        <p>Join thousands of people taking control of their finances with WealthPilot. Start your journey today.</p>
+        <div class="download-buttons">
+            <a href="#" class="app-store-btn">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 21.99 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 21.99C7.79 22.03 6.8 20.68 5.96 19.47C4.25 16.56 2.93 11.3 4.7 7.72C5.57 5.94 7.36 4.86 9.28 4.84C10.56 4.82 11.78 5.72 12.55 5.72C13.33 5.72 14.79 4.62 16.35 4.8C17.02 4.83 18.89 5.08 20.11 6.83C20 6.9 17.53 8.29 17.56 11.25C17.59 14.77 20.63 15.91 20.66 15.92C20.63 16 20.19 17.45 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/>
+                </svg>
+                <div class="store-text">
+                    <small>Download on the</small>
+                    <span>App Store</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
 
-        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-left">
+            &copy; 2026 WealthPilot. All rights reserved.
+        </div>
+        <ul class="footer-links">
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </div>
+</footer>
 
-        // Smooth nav background on scroll
-        window.addEventListener('scroll', () => {
-            const nav = document.querySelector('nav');
-            if (window.scrollY > 50) {
-                nav.style.boxShadow = '0 2px 20px rgba(0,0,0,0.06)';
-            } else {
-                nav.style.boxShadow = 'none';
+<script>
+    // ========== SCROLL PROGRESS ==========
+    window.addEventListener('scroll', () => {
+        const scrollTop = document.documentElement.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const progress = (scrollTop / scrollHeight) * 100;
+        document.getElementById('scrollProgress').style.width = progress + '%';
+    });
+
+    // ========== NAV SCROLL EFFECT ==========
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            nav.classList.add('scrolled');
+        } else {
+            nav.classList.remove('scrolled');
+        }
+    });
+
+    // ========== FADE-IN OBSERVER ==========
+    const fadeObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                fadeObserver.unobserve(entry.target);
             }
         });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -40px 0px'
+    });
 
-        // Contact form
-        document.getElementById('contactForm').addEventListener('submit', async (e) => {
+    document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
+
+    // ========== SMOOTH SCROLL FOR ANCHORS ==========
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
             e.preventDefault();
-            const form = e.target;
-            const btn = form.querySelector('button');
-            btn.textContent = 'Sending...';
-            btn.disabled = true;
-            try {
-                const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } });
-                if (res.ok) {
-                    form.style.display = 'none';
-                    document.getElementById('contactSuccess').style.display = 'block';
-                } else { btn.textContent = 'Error — try again'; btn.disabled = false; }
-            } catch { btn.textContent = 'Error — try again'; btn.disabled = false; }
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         });
-    </script>
+    });
+
+    // ========== CONTACT FORM ==========
+    const contactForm = document.getElementById('contactForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const formSuccess = document.getElementById('formSuccess');
+
+    contactForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending...';
+
+        try {
+            const response = await fetch(this.action, {
+                method: 'POST',
+                body: new FormData(this),
+                headers: { 'Accept': 'application/json' }
+            });
+
+            if (response.ok) {
+                contactForm.style.display = 'none';
+                formSuccess.classList.add('show');
+            } else {
+                throw new Error('Form submission failed');
+            }
+        } catch (error) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Send Message';
+            alert('Something went wrong. Please try again.');
+        }
+    });
+</script>
+
 </body>
 </html>
